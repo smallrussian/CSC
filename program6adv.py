@@ -1,11 +1,10 @@
 import BarChart as bc
 import operator
-
 class ValueStorage:
     title=''
     x_axis=''
     source=''
-    counter=int
+    counter=''
 
 def readanddict(dict):
     templist=f.readline().split(',')
@@ -14,7 +13,7 @@ def readanddict(dict):
         vals.counter=templist[0]
     return dict
 
-def drawchart(num, file , counter, dictnum):
+def drawchart(num, counter, dict):
     # create the bar chart
     title = ValueStorage.title
     x_axis = ValueStorage.x_axis
@@ -22,9 +21,9 @@ def drawchart(num, file , counter, dictnum):
     chart = bc.BarChart(title, x_axis, source)
     
     # add the bars and caption to the bar chart
-    chart.reset()
-    for i in range(0, dictnum):
-        chart.add(keylist[i], valuelist[i], keylist[i])
+    for j in range(len(dict)):
+        key,val=dict[j]
+        chart.add(key,val,key)
 
     #chart.add('Delhi',       27890, 'South Asia')
     #chart.add('Shanghai',    25779, 'East Asia')
@@ -41,7 +40,7 @@ def drawchart(num, file , counter, dictnum):
     chart.draw()
     chart.save('test.png')
     chart.save('test.pdf')
-    chart.leave_window_open()
+    #chart.leave_window_open()
 
 #mainloop
 
@@ -62,15 +61,16 @@ while True:
     number=int(numberstr)
     for i in range(number):
         readanddict(unsorteddict)
-    keylist=unsorteddict.keys()
-    valuelist=unsorteddict.values()
-    drawchart(barcount, filenameinput, ValueStorage.counter, number)
+    cd = sorted(unsorteddict.items(),key=operator.itemgetter(1),reverse=True)
+    #one of these answers taught me how to do this 
+    #https://stackoverflow.com/questions/20577840/python-dictionary-sorting-in-descending-order-based-on-values
+    drawchart(barcount, ValueStorage.counter, cd)
         #pass
     #f.readline
     if not f.readline():
         break
-print(unsorteddict)
 
-sorted_d = dict( sorted(unsorteddict.items(), key=operator.itemgetter(1),reverse=True)) #i wanted to sort the values in descending order
+
+#sorted_d = dict( sorted(unsorteddict.items(), key=operator.itemgetter(1),reverse=True)) #i wanted to sort the values in descending order
 #credit to https://www.w3resource.com/python-exercises/dictionary/python-data-type-dictionary-exercise-1.php for teaching me to do this
 print(type(unsorteddict['Black Panther']))

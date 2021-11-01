@@ -5,8 +5,8 @@ import matplotlib.pyplot as pyplot
 # color palette from https://vega.github.io/vega/docs/schemes/
 # (replaced #d62728 with #d64c4c)
 hex20 = ['#aec7e8', '#c5b0d5', '#c49c94', '#dbdb8d', '#17becf',
-         '#9edae5', '#f7b6d2', '#c7c7c7", '#1f77b4', '#ff7f0e',
-         '#ffbb78', '#98df8a', '#d64c4c", '#2ca02c', '#9467bd',
+         '#9edae5', '#f7b6d2', '#c7c7c7', '#1f77b4', '#ff7f0e',
+         '#ffbb78', '#98df8a', '#d64c4c', '#2ca02c', '#9467bd',
          '#8c564b', '#ff9896', '#e377c2', '#7f7f7f', '#bcbd22']
 
 class BarChart:
