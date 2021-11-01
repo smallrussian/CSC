@@ -2,10 +2,11 @@ import RPi.GPIO as GPIO
 from time import sleep
 GPIO.setmode(GPIO.bcm)
 button=25
+led=17
 GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-while True
-    GPIO.output(17, GPIO.HIGH)
-    sleep(0.5)
-    GPIO.output(17, GPIO.LOW)
-    sleep(0.5)
+while True:
+    if (GPIO.input(button) == GPIO.HIGH):
+        GPIO.output(led, GPIO.HIGH)
+    else:
+        GPIO.output(led, GPIO.LOW)
