@@ -21,9 +21,13 @@ def drawchart(num, counter, dict):
     chart = bc.BarChart(title, x_axis, source)
     
     # add the bars and caption to the bar chart
+    keycounter=0
     for j in range(len(dict)):
         key,val=dict[j]
         chart.add(key,val,key)
+        keycounter+=1
+        if keycounter==num:
+            break
 
     #chart.add('Delhi',       27890, 'South Asia')
     #chart.add('Shanghai',    25779, 'East Asia')
@@ -41,12 +45,14 @@ def drawchart(num, counter, dict):
     chart.save('test.png')
     chart.save('test.pdf')
     #chart.leave_window_open()
+    return chart
 
 #mainloop
 
 vals=ValueStorage
+colorlist=[]
 unsorteddict={}
-filenameinput='infinity-war.txt'
+filenameinput='cities.txt'
 #filenameinput=str(input("Please enter a filename\n"))
 barcount=int(input("How many bars do you want to display?\n"))
 f=open(filenameinput, 'r')

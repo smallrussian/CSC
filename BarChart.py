@@ -127,7 +127,7 @@ class BarChart:
     def draw(self):
         k = len(self.names)
         y_pos = list(reversed(range(k)))
-        max_value = max(self.values)
+        max_value = max(self.values, default=0)
 
         # clear the figure
         pyplot.clf()
