@@ -11,7 +11,7 @@ print(board)
 #place actually place it 
 #print all possible solutions
 #do it row by row
-
+#https://www.techiedelight.com/print-possible-solutions-n-queens-problem/
 #this is going to check if its possible to do it 
 def if_possible(grid, r, x):
     #first i got to check the horizontal values
