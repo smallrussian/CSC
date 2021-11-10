@@ -21,12 +21,20 @@ def is_possible(matrix, r, x):
             return False
     #then check diagonal values
     #we need to iterate over the previous top rows and cokumns to check if a queen is already there
-    n, j=r, x#assign new values and start from the biggest possible row/column
+    n, z=r, x#assign new values and start from the biggest possible row/column
     #this one we check if is diagonal from the bottom, by iterating j down by 1 
-    for z in range(n,0,-1): #and y in range(j, 0, -1): #rows 
-        for y in range(j,0,-1):#then columns in those rows
-            if matrix[z][y]=='Q':
-                return False
+    #i tried a for loop but that wouldnt work cause it goes throw each row and column value instead of just diagonal values
+    while n>=0 and z>=0:
+        if matrix[n][n]=='Q':
+            return False
+        n-=1
+        z-=1
+
+    #since we use while we have to reset n and z
+    n,z=r,x
+    while n>=0 and j<=N: #use N or len(matrix)
+
+            
 
             
 # to iterate by row set r
