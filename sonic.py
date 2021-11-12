@@ -34,16 +34,16 @@ def calibrate():
 	    # delay a short time before using the sensor again
 	    sleep(CALIBRATION_DELAY)
         # calculate the average of the distances
-        distance_avg /= CALIBRATIONS
-        if (DEBUG):
-	        print("Average is {}cm".format(distance_avg))
-        # calculate the correction factor
-        correction_factor = known_distance / distance_avg
-        if (DEBUG):
-	        print("Correction factor:{}".format(correction_factor))
-        print("Done.")
-        print()
-        return correction_factor
+    distance_avg /= CALIBRATIONS
+    if (DEBUG):
+	    print("Average is {}cm".format(distance_avg))
+    # calculate the correction factor
+    correction_factor = known_distance / distance_avg
+    if (DEBUG):
+	    print("Correction factor:{}".format(correction_factor))
+    print("Done.")
+    print()
+    return correction_factor
 
 
 #uses sensor to calcualte the distance to an object
@@ -57,6 +57,15 @@ def getDistance():
         start=time()
     while(GPIO.input(Echo)==GPIO.HIGH):
         end=time()
+    duration=end-start
+
+    distance=SPEED_OF_SOUND*duration
+
+    distance/=2
+
+    distance*=100
+    return distance
+
 ########
 
 #MAIN PROGRAM
@@ -69,5 +78,18 @@ sleep(SETTLE_TIME) #seconds to let the sensor sett
 
 #next calibrate the sensor
 correction_factor=calibrate()
+input("Press enter to begin...")
+print("Getting Measurements")
+while True:
+    print("Measuring...")
+    distance=getDistance()*correction_factor
+    sleep(1)
+    distance=round(distance,4)
+    print("Distance measured: {cm}".format(distance))
+    i=input("--Get another measurment (Y/n)? ")
+    if (not i in [ "y", "Y", "yes", "yes", "" ]):
+        break
 #then measure
 #finally  cleanup the GPIO pins 
+print("Done.")
+GPIO.cleanup()
