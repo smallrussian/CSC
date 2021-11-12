@@ -4,7 +4,9 @@ from time import sleep, time
 DEBUG=False
 SETTLE_TIME=2   #seconds to let the sensor settle
 CALIBRATIONS=5  #number of calibration measurements
-CALIBRATION_DELAY=1 seconds to delay between them
+CALIBRATION_DELAY=1 #seconds to delay between them
+TRIGGER_TIME=.00001
+SPEED_OF_SOUND=343
 #set the pi to the broadcom pin layout
 GPIO.setmode(GPIO.BCM)
 #GPIO pins
@@ -31,10 +33,30 @@ def calibrate():
 	    distance_avg += distance
 	    # delay a short time before using the sensor again
 	    sleep(CALIBRATION_DELAY)
+        # calculate the average of the distances
+        distance_avg /= CALIBRATIONS
+        if (DEBUG):
+	        print("Average is {}cm".format(distance_avg))
+        # calculate the correction factor
+        correction_factor = known_distance / distance_avg
+        if (DEBUG):
+	        print("Correction factor:{}".format(correction_factor))
+        print("Done.")
+        print()
+        return correction_factor
+
 
 #uses sensor to calcualte the distance to an object
 def getDistance():
-    pass
+    #TRIGGER THE SEONOR BY SETTING IT high for 
+    # a short time and the nsetting it low
+    GPIO.output(Trig, GPIO.HIGH)
+    sleep(TRIGGER_TIME)
+    GPIO.output(Trig, GPIO.LOW)
+    while(GPIO.input(Echo)==GPIO.LOW):
+        start=time()
+    while(GPIO.input(Echo)==GPIO.HIGH):
+        end=time()
 ########
 
 #MAIN PROGRAM
