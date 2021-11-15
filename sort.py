@@ -97,7 +97,7 @@ def GeeksbinarySearch (arr, l, r, x):
 
 
 #main program
-test2=[5,4,6,2,3,1]
+#test2=[5,4,6,2,3,1]
 #testArray=["Lockhart", "Quirrell", "Crouch", "Umbridge", "Hooch", "Trelawney", "Slughorn", "Snape", "Sprout", "Flitwick", "Hagrid", "Sinistra"]
 #findIt=str(input("Who should I find?\n"))
 #BubbleSort(testArray, len(testArray))#
@@ -107,6 +107,6 @@ test2=[5,4,6,2,3,1]
 #print("Insertion Sort")
 #InsertionSort2(testArray)
 #print("Selection Sort")
-SelectionSort(test2, len(test2))
+#SelectionSort(test2, len(test2))
 #print("bubble sort")
 #BubbleSort(testArray, len(testArray))
