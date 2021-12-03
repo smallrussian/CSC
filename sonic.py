@@ -1,3 +1,4 @@
+from sort import SelectionSort
 import RPi.GPIO as GPIO
 from time import sleep, time
 #constatns
@@ -66,6 +67,9 @@ def getDistance():
     distance*=100
     return distance
 
+def sortDistance(array):
+    SelectionSort(array, len(array))
+    return array
 ########
 
 #MAIN PROGRAM
@@ -75,7 +79,7 @@ def getDistance():
 print("Wating for sensor to settle({}s".format(SETTLE_TIME))
 GPIO.output(Trig, GPIO.LOW)
 sleep(SETTLE_TIME) #seconds to let the sensor sett
-
+distance_array=[]#THIS IS NEW
 #next calibrate the sensor
 correction_factor=calibrate()
 input("Press enter to begin...")
@@ -85,6 +89,7 @@ while True:
     distance=getDistance()*correction_factor
     sleep(1)
     distance=round(distance,4)
+    distance_array.append(distance)
     print("Distance measured: {cm}".format(distance))
     i=input("--Get another measurment (Y/n)? ")
     if (not i in [ "y", "Y", "yes", "yes", "" ]):
