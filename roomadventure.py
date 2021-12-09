@@ -31,7 +31,7 @@ class Room:
         self.useableeffects=[]
         self.functionconditions=[]
         self.commands=[]
-    
+        self.changeidentifier=False
     # adds an item to the room 
     # the item is a string (e.g., table) 
     # the desc is a string that describes the item (e.g., it is made of wood) 
@@ -132,6 +132,12 @@ class Room:
     @commands.setter
     def commands(self, value):
         self._commands=value
+    @property
+    def changeidentifier(self):
+        return self._changeidentifier
+    @changeidentifier.setter
+    def changeidentifier(self, value):
+        self._changeidentifier=value
     
 
     # adds an exit to the room 
@@ -149,6 +155,7 @@ class Room:
         self._itemDescriptions.update({item:desc})
 
     def changeItem(self, item, desc, functioncondition, command):
+
         self._itemDescriptions[item]=desc
         if functioncondition==True:
             command
@@ -175,11 +182,9 @@ class Room:
         #USED WHEN EXITING A ROOM
         self._usables.remove(item)
     
-    def addKey(self, unlock, unlockeffect, functioncondition, command):
+    def addKey(self, unlock, unlockeffect, command):
         self._usableskeys.append(unlock)
         self._useableeffects.append(unlockeffect)
-        self._functionconditions.append(functioncondition)
-        self._commands.append(command)
     
     # returns a string description of the room 
     def __str__(self): 
@@ -234,6 +239,7 @@ def createRooms():
     # since it needs to be changed in the main part of the 
     #  program, it must be global 
     global currentRoom 
+    global r4identfier
  
 
  # create the rooms and give them meaningful names 
@@ -281,12 +287,11 @@ def createRooms():
     r4.addItem("brew_rig", "Gourd is brewing some sort of oatmeal stout on the brew rig. A 6-pack is resting beside it.") 
     r4.addItem("chest", "A chest that is locked tight")
     r4.addUsable("key")
-    r4.addKey("You open the chest and unlock it", "A chest that is open with a small key inside it", True, r4.addGrabbable)
+    r4.addKey("You open the chest and unlock it", "A chest that is open with a small key inside it"
 
     # set room 1 as the current room at the beginning 
     #  of the game 
     currentRoom = r1 
-###################################################### 
 # START THE GAME!!! 
 inventory = [] # nothing in inventory...yet 
 createRooms()  # create the rooms
