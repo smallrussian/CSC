@@ -22,9 +22,16 @@ class Room:
         self.name = name 
         self.exits = [] 
         self.exitLocations = [] 
-        self.items = [] 
-        self.itemDescriptions = [] 
+        self.items = []
+        self.itemDescriptions = {} 
         self.grabbables = []
+        self.usables=[]
+        self.usableskeys=[]
+        self.exitconditions=[]
+        self.useableeffects=[]
+        self.functionconditions=[]
+        self.commands=[]
+    
     # adds an item to the room 
     # the item is a string (e.g., table) 
     # the desc is a string that describes the item (e.g., it is made of wood) 
@@ -83,19 +90,68 @@ class Room:
     @grabbables.setter 
     def grabbables(self, value): 
         self._grabbables = value
+    
+    @property
+    def usables(self):
+        return(self._usables)
+    @usables.setter
+    def usables(self, value):
+        self._usables=value
+    
+    @property
+    def usableskeys(self):
+        return self._usableskeys
+    @usableskeys.setter
+    def usableskeys(self, value):
+        self._usableskeys=value
+    @property
+    def usableeffects(self):
+        return self._useableeffects
+    
+    @usableeffects.setter
+    def useableeffects(self, value):
+        self._useableeffects=value    
+    
+
+    @property
+    def exitconditions(self):
+        return self._exitconditions
+    
+    @exitconditions.setter
+    def exitconditions(self, value):
+        self._exitconditions=value
+    @property
+    def functionconditions(self):
+        return self._functionconditions
+    @functionconditions.setter
+    def functionconditions(self, value):
+        self._functionconditions=value
+    @property
+    def commands(self):
+        return self._commands
+    @commands.setter
+    def commands(self, value):
+        self._commands=value
+    
 
     # adds an exit to the room 
     # the exit is a string (e.g., north) 
     # the room is an instance of a room 
-    def addExit(self, exit, room): 
+    def addExit(self, exit, room, locked): 
         # append the exit and room to the appropriate lists 
         self._exits.append(exit) 
         self._exitLocations.append(room)
+        self._exitconditions.append(locked)
     
     def addItem(self, item, desc): 
         # append the item and description to the appropriate lists 
         self._items.append(item) 
-        self._itemDescriptions.append(desc)
+        self._itemDescriptions.update({item:desc})
+
+    def changeItem(self, item, desc, functioncondition, command):
+        self._itemDescriptions[item]=desc
+        if functioncondition==True:
+            command
     
         # adds a grabbable item to the room 
         #the item is a string (e.g., key) 
@@ -105,9 +161,26 @@ class Room:
     
     # removes a grabbable item from the room 
     # the item is a string (e.g., key)
-    def delGrabbable(self,item):
+    def delGrabbable(self, item):
         # remove the item from the list 
         self._grabbables.remove(item)
+    
+    #ADDS A USABLE ITEM TO THE ROOM
+    def addUsable(self, item):
+        #APPENDS USABLE ITEM TO LIST 
+        self._usables.append(item)
+
+    #REMOVES A USABLE ITEM FROM THE LIST
+    def delUsable(self, item):
+        #USED WHEN EXITING A ROOM
+        self._usables.remove(item)
+    
+    def addKey(self, unlock, unlockeffect, functioncondition, command):
+        self._usableskeys.append(unlock)
+        self._useableeffects.append(unlockeffect)
+        self._functionconditions.append(functioncondition)
+        self._commands.append(command)
+    
     # returns a string description of the room 
     def __str__(self): 
         # first, the room name 
@@ -168,11 +241,13 @@ def createRooms():
     r2 = Room("Room 2") 
     r3 = Room("Room 3") 
     r4 = Room("Room 4") 
-    r5=  Room("Room 6")
+    r5=  Room("Room 5")
  
     # add exits to room 1 
-    r1.addExit("east", r2) 
-    r1.addExit("south", r3) 
+    r1.addExit("east", r2, False) 
+    r1.addExit("south", r3, False) 
+    r1.addGrabbable("Storm Ruler")
+    r1.addUsable("Storm Ruler")
     # add grabbables to room 1 
     r1.addGrabbable("key") 
     # add items to room 1 
@@ -181,15 +256,15 @@ def createRooms():
  
 
     # add exits to room 2 
-    r2.addExit("west", r1) 
-    r2.addExit("south", r4) 
+    r2.addExit("west", r1, False) 
+    r2.addExit("south", r4, False) 
     # add items to room 2 
     r2.addItem("rug", "It is nice and Indian. It also needs to be vacuumed.") 
     r2.addItem("fireplace", "It is full of ashes.") 
  
     # add exits to room 3 
-    r3.addExit("north", r1) 
-    r3.addExit("east", r4) 
+    r3.addExit("north", r1, False)
+    r3.addExit("east", r4, False) 
     # add grabbables to room 3 
     r3.addGrabbable("book") 
     # add items to room 3 
@@ -197,14 +272,16 @@ def createRooms():
     r3.addItem("statue", "There is nothing special about it.")
     r3.addItem("desk", "The statue is resting on it. So is a book.") 
     # add exits to room 4 
-    r4.addExit("north", r2) 
-    r4.addExit("west", r3) 
-    r4.addExit("south", None) # DEATH! 
+    r4.addExit("north", r2, False) 
+    r4.addExit("west", r3, False) 
+    r4.addExit("south", None, False) # DEATH! 
     # add grabbables to room 4 
     r4.addGrabbable("6-pack") 
     # add items to room 4 
     r4.addItem("brew_rig", "Gourd is brewing some sort of oatmeal stout on the brew rig. A 6-pack is resting beside it.") 
- 
+    r4.addItem("chest", "A chest that is locked tight")
+    r4.addUsable("key")
+    r4.addKey("You open the chest and unlock it", "A chest that is open with a small key inside it", True, r4.addGrabbable)
 
     # set room 1 as the current room at the beginning 
     #  of the game 
@@ -260,9 +337,15 @@ while (True):
             for i in range(len(currentRoom.exits)):
                 # a valid exit is found
                 if (noun == currentRoom.exits[i]):
+                    if currentRoom.exits[i]==True:
+                        #I PUT IN LOCKED DOORS 
+                        response="This door is locked"
+                        break
                     # change the current room to the one that is
                     # associated with the specified exit
+                    
                     currentRoom = currentRoom.exitLocations[i]
+    
                     # set the response (success)
                     response = "Room changed."
                     # no need to check any more exits
@@ -274,9 +357,10 @@ while (True):
             # check for valid items in the current room
             for i in range(len(currentRoom.items)):
                 # a valid item is found
+
                 if (noun == currentRoom.items[i]):
                     # set the response to the item's description
-                    response = currentRoom.itemDescriptions[i]
+                    response = currentRoom.itemDescriptions[noun]
                     # no need to check any more items
                     break
         # the verb is: take
@@ -290,10 +374,20 @@ while (True):
                     # add the grabbable item to the player's inventory
                     inventory.append(grabbable)
                     # remove the grabbable item from the room
-                    currentRoom.delGrabbable(grabbable)
+                    currentRoom.delGrabbable(grabbable) 
                     # set the response (success)
                     response = "Item grabbed."
                     # no need to check any more grabbable items
                     break
+        elif (verb=="use"):
+            #SETS THE DEFAULT RESPONSE
+            reponse="You can't use that" 
+            for i in range(len(currentRoom.usables)):
+                if noun==currentRoom.usables[i]:
+                    response=currentRoom.usableskeys[i]
+                    currentRoom.changeItem(noun, currentRoom.useableeffects[i], currentRoom.functionconditions[i], currentRoom.commands[i])
+
+
+
     #display the response
     print("\n{}".format(response))
