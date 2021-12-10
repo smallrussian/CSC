@@ -1,4 +1,3 @@
-
 ###################################################### 
 # Name: 
 
@@ -25,17 +24,6 @@ class Room:
         self.items = []
         self.itemDescriptions = {} 
         self.grabbables = []
-        self.usables=[]
-        self.usableskeys=[]
-        self.exitconditions=[]
-        self.useableeffects=[]
-        self.functionconditions=[]
-        self.commandparams=[]
-        self.changeidentifier=False
-    # adds an item to the room 
-    # the item is a string (e.g., table) 
-    # the desc is a string that describes the item (e.g., it is made of wood) 
-# getters and setters for the instance variables 
     @property 
     def name(self): 
         return self._name 
@@ -91,59 +79,7 @@ class Room:
     def grabbables(self, value): 
         self._grabbables = value
     
-    @property
-    def usables(self):
-        return(self._usables)
-    @usables.setter
-    def usables(self, value):
-        self._usables=value
     
-    @property
-    def usableskeys(self):
-        return self._usableskeys
-    @usableskeys.setter
-    def usableskeys(self, value):
-        self._usableskeys=value
-    @property
-    def usableeffects(self):
-        return self._useableeffects
-    
-    @usableeffects.setter
-    def useableeffects(self, value):
-        self._useableeffects=value    
-    
-
-    @property
-    def exitconditions(self):
-        return self._exitconditions
-    
-    @exitconditions.setter
-    def exitconditions(self, value):
-        self._exitconditions=value
-
-    @property
-    def functionconditions(self):
-        return self._functionconditions
-
-    @functionconditions.setter
-    def functionconditions(self, value):
-        self._functionconditions=value
-
-    @property
-    def commandparams(self):
-        return self._commandparams
-
-    @commandparams.setter
-    def commandparams(self, value):
-        self._commandparams=value
-
-    @property
-    def changeidentifier(self):
-        return self._changeidentifier
-
-    @changeidentifier.setter
-    def changeidentifier(self, value):
-        self._changeidentifier=value
     
 
     # adds an exit to the room 
@@ -153,25 +89,13 @@ class Room:
         # append the exit and room to the appropriate lists 
         self._exits.append(exit) 
         self._exitLocations.append(room)
-        self._exitconditions.append(locked)
-    
-    def changeExit(self, room, direction, ):
-        for i in self.
+
     
     def addItem(self, item, desc): 
         # append the item and description to the appropriate lists 
         self._items.append(item) 
         self._itemDescriptions.update({item:desc})
 
-    def changeItem(self, item, desc, command, *commandparam):
-
-        self._itemDescriptions[item]=desc
-        if self.changeidentifier==True:
-            command(*commandparam)
-            self._changeidentifier=False
-    
-        # adds a grabbable item to the room 
-        #the item is a string (e.g., key) 
     def addGrabbable(self, item): 
         # append the item to the list 
         self._grabbables.append(item)
@@ -182,21 +106,7 @@ class Room:
         # remove the item from the list 
         self._grabbables.remove(item)
     
-    #ADDS A USABLE ITEM TO THE ROOM
-    def addUsable(self, item):
-        #APPENDS USABLE ITEM TO LIST 
-        self._usables.append(item)
 
-    #REMOVES A USABLE ITEM FROM THE LIST
-    def delUsable(self, item):
-        #USED WHEN EXITING A ROOM
-        self._usables.remove(item)
-    
-    def addKey(self, unlock, unlockeffect, *commandparam):
-        self._usableskeys.append(unlock)
-        self._useableeffects.append(unlockeffect)
-        self._commandparams.append(commandparam)
-    
     # returns a string description of the room 
     def __str__(self): 
         # first, the room name 
@@ -264,7 +174,6 @@ def createRooms():
     r1.addExit("east", r2, False) 
     r1.addExit("south", r3, False) 
     r1.addGrabbable("Storm Ruler")
-    r4.addUsable("Storm_Ruler")
     # add grabbables to room 1 
     r1.addGrabbable("key") 
     # add items to room 1 
@@ -297,12 +206,7 @@ def createRooms():
     # add items to room 4 
     r4.addItem("brew_rig", "Gourd is brewing some sort of oatmeal stout on the brew rig. A 6-pack is resting beside it.") 
     r4.addItem("chest", "A chest that is locked tight")
-    r4.addUsable("key")
-    r4.changeidentifier=True
-    r4.addKey("You hear the giant's death curtle", r4.changeItem, "Giant", "A dead giant")
-    r4.addKey("You open the chest and unlock it", r4.changeItem, "chest", "An open chest with a small key inside", r4.addGrabbable, "small_key")
-    r4.addItem("Giant", "A large sleeping giant named Yhorm")
-    
+
     # set room 1 as the current room at the beginning 
     #  of the game 
     currentRoom = r1 
@@ -356,7 +260,7 @@ while (True):
             for i in range(len(currentRoom.exits)):
                 # a valid exit is found
                 if (noun == currentRoom.exits[i]):
-                    if currentRoom.exitcondition[i]==True:
+                    if currentRoom.exits[i]==True:
                         #I PUT IN LOCKED DOORS 
                         response="This door is locked"
                         break
@@ -398,21 +302,7 @@ while (True):
                     response = "Item grabbed."
                     # no need to check any more grabbable items
                     break
-        elif (verb=="use"):
-            #SETS THE DEFAULT RESPONSE
-            if noun not in inventory:
-                print("You don't have that item")
-                break
-            reponse="You can't use that" 
-            for i in range(len(currentRoom.usables)):
-                if noun==currentRoom.usables[i]:
-                    response=currentRoom.usableskeys[i]
-                    print(currentRoom.commandparams[i])
-                    currentRoom.useableeffects[i](*currentRoom.commandparams[i])
-                    
-                    
 
 
-
-    #display the response
-    print("\n{}".format(response))
+#display the response
+print("\n{}".format(response))
