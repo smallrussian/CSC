@@ -32,6 +32,7 @@ class Room:
         self.functionconditions=[]
         self.commands=[]
         self.changeidentifier=False
+        self.changecommand=function
     # adds an item to the room 
     # the item is a string (e.g., table) 
     # the desc is a string that describes the item (e.g., it is made of wood) 
@@ -154,10 +155,10 @@ class Room:
         self._items.append(item) 
         self._itemDescriptions.update({item:desc})
 
-    def changeItem(self, item, desc, functioncondition, command):
+    def changeItem(self, item, desc, command):
 
         self._itemDescriptions[item]=desc
-        if functioncondition==True:
+        if self.changeidentifier==True:
             command
     
         # adds a grabbable item to the room 
@@ -182,7 +183,7 @@ class Room:
         #USED WHEN EXITING A ROOM
         self._usables.remove(item)
     
-    def addKey(self, unlock, unlockeffect, command):
+    def addKey(self, unlock, unlockeffect, command, commandparam):
         self._usableskeys.append(unlock)
         self._useableeffects.append(unlockeffect)
     
@@ -239,7 +240,7 @@ def createRooms():
     # since it needs to be changed in the main part of the 
     #  program, it must be global 
     global currentRoom 
-    global r4identfier
+    
  
 
  # create the rooms and give them meaningful names 
@@ -287,8 +288,7 @@ def createRooms():
     r4.addItem("brew_rig", "Gourd is brewing some sort of oatmeal stout on the brew rig. A 6-pack is resting beside it.") 
     r4.addItem("chest", "A chest that is locked tight")
     r4.addUsable("key")
-    r4.addKey("You open the chest and unlock it", "A chest that is open with a small key inside it"
-
+    r4.addKey("You open the chest and unlock it", "A chest that is open with a small key inside it", None)
     # set room 1 as the current room at the beginning 
     #  of the game 
     currentRoom = r1 
@@ -298,7 +298,7 @@ createRooms()  # create the rooms
 # play forever (well, at least until the player dies or asks to
 # quit)
 while (True):
-    # set the status so the player has situational awareness
+    # set the status so the player has situational awarenessz
     # the status has room and inventory information
     status = "{}\nYou are carrying: {}\n".format(currentRoom, inventory)
 
@@ -390,7 +390,8 @@ while (True):
             for i in range(len(currentRoom.usables)):
                 if noun==currentRoom.usables[i]:
                     response=currentRoom.usableskeys[i]
-                    currentRoom.changeItem(noun, currentRoom.useableeffects[i], currentRoom.functionconditions[i], currentRoom.commands[i])
+                    currentRoom.changeidentifier=True
+                    
 
 
 
