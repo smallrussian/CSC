@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import ImageTk, Image
 class Room: 
 
  # the constructor 
