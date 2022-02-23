@@ -8,6 +8,7 @@ class Word:
     
     @property
     def word(self):
+        
         return self._word
     @word.setter
     def word(self, value):

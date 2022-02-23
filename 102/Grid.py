@@ -12,6 +12,7 @@
 from Location import Location
 from Word import Word
 from random import randint
+from Debug import DEBUG
 
 # the Grid class
 # a Grid has a size (the same for both width and height), a grid of letters, and Word instances that are within the Grid
@@ -28,16 +29,15 @@ class Grid:
     
         self._size=size
         # initialize the grid
-        self._grid=grid
+        self._grid=[]
         # add the rows
             # create a new blank row
-
-            # fill it with spaces
+        self._grid= [['.']*self._size for _ in range(self._size)] #i dont remember where i found it but the internet definitely gave me this line of code
 
             # add the new row
 
         # initialize the words
-        self._words=words
+        self._words=[]
 
     # getters and setters
     ## I like putting them together - Julian
@@ -46,7 +46,10 @@ class Grid:
         return self._grid
     @grid.setter
     def grid(self, value):
+        if value<1:
+            value=25
         self._grid=value
+        
     
     @property
     def words(self):
@@ -54,6 +57,13 @@ class Grid:
     @words.setter
     def words(self, value):
         self._words=value
+    
+    @property
+    def size(self):
+        return self._size
+    @size.setter
+    def size(self, value):
+        self._size=value
 
 
     # tries to position a word at the specified orientation in the grid
@@ -66,7 +76,14 @@ class Grid:
 
         # tweak the max_col value based on the HR orientation
         # **modify to support remaining orientations (HL, VD, VU, DRD, DRU, DLD, DLU)**
-        max_col = self._size - len(word)
+        match orientation:
+            case "HR":
+                max_col = self._size - len(word)
+            case "HL":
+                min_col = self._size - len(word)
+            case "VD":
+                pass
+                #max_row = self.size - len(word)
 
         # create the Word instance
         word = Word(word, orientation)
@@ -148,3 +165,6 @@ class Grid:
         grid = grid.rstrip("\n")
 
         return grid
+if DEBUG:
+    grid=Grid()
+    print(grid)

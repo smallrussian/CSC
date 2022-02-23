@@ -3,47 +3,52 @@
 # Dr. Jean Gourd
 # Last modified on 2020-11-05
 #
-# A main program to test implementation of the Location and Word classes.
-# Requires Location.py and Word.py.
+# A template for the main program for the programming assignment Word Search
+#  (part 2).
+# Requires Word.py and Grid.py.
 ###############################################################################
 
 # import libraries
-from Location import Location
+from distutils.debug import DEBUG
 from Word import Word
+from Grid import Grid
 from sys import stdin
-from random import sample, choice, randint
+from random import sample, choice
 
 # define constants
-NUM_WORDS = 15  # how many words to randomly select from the input
-GRID_SIZE = 25  # the height/width of the "fictitious" grid
+NUM_WORDS = 15              # how many words to randomly select
+GRID_SIZE = 25              # the height/width of the grid
+DISPLAY_SOLUTION = True     # display the solution?
 
 ######
 # MAIN
 ######
-# read the words from stdin - feel free to change this to the other way to read a file
-words = [ ]
-for line in stdin:
+# read the words from file
+##A LOT OF THIS I COPIED OVER FROM THE FIRST WORD SEARCH
+words=[]
+fin=open('animals.txt', 'r')
     # remove the trailing newline and convert to uppercase
+for line in fin:
     words.append(line.rstrip("\n").upper())
 
 # grab a sampling of the specified number of words
 words = sample(words, NUM_WORDS)
 
-# inintialize a list of Word instances
-word_objects = [ ]
-# for each word, randomly pick an orientation and Location
+# initialize the grid
+grid=Grid()
+
+# process the words
+    # randomly select an orientation for the current word
 for word in words:
-    # randomly pick an orientation
-    orientation = choice(Word.ORIENTATIONS)
+    orientation=choice(Word.ORIENTATIONS)
 
-    # randomly pick a Location (within the grid)
-    row = randint(0, GRID_SIZE - 1)
-    col = randint(0, GRID_SIZE - 1)
-    location = Location(row, col)
+    # position the current word at the chosen orientation in the grid
+    grid.position(word, orientation)
 
-    # append an Word instance of this word
-    word_objects.append(Word(word, orientation, location))
-    
+# display stats (i.e., "Successfully placed X of Y words.")
+
+# display the grid
+print(grid)
 # display the words
-for word in word_objects:
-    print(word)
+print(grid.words)
+# if specified, display the solution

@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream:102/roomadventure.py
+
 
 ###################################################### 
 # Julian Shniter
@@ -521,7 +521,7 @@ while True:
 
 
     #display the response
-=======
+
 
 ###################################################### 
 # Julian Shniter
@@ -1044,5 +1044,5 @@ while True:
 
 
     #display the response
->>>>>>> Stashed changes:roomadventure.py
+
     print("\n{}".format(response))
