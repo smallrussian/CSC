@@ -1,5 +1,6 @@
 from Debug import DEBUG
 class Word:
+    ORIENTATIONS=["HR", "HL", "VD", "VU", "DRD", "DRU", "DLD", "DLU"]
     def __init__(self, word, orientation=None, location=None):
         self.word=word
         self.orientation=orientation
