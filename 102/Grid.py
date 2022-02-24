@@ -80,10 +80,23 @@ class Grid:
             case "HR":
                 max_col = self._size - len(word)
             case "HL":
-                min_col = self._size - len(word)
+                min_col = len(word)
             case "VD":
-                pass
-                #max_row = self.size - len(word)
+                max_row = self._size - len(word)
+            case "VU":
+                min_row = len(word)
+            case "DRD":
+                max_col = self._size - len(word)
+                max_row = self._size - len(word)
+            case "DRU":
+                max_col = self._size - len(word)
+                min_row = len(word)
+            case "DLD":
+                min_col = len(word)
+                max_row = self._size - len(word)
+            case "DLU":
+                min_col = len(word)
+                min_row = len(word)
 
         # create the Word instance
         word = Word(word, orientation)
@@ -92,7 +105,7 @@ class Grid:
         loc = Location(randint(min_row, max_row), randint(min_col, max_col))
         # check if this location works up to the specified maximum number of tries
         tries = 0
-        while (not self._check(word, loc)):
+        while (not self._check(word, loc, orientation)):
             # stop trying if we've reached the specified maximum number of tries
             if (tries == Grid.MAX_TRIES):
                 return
@@ -103,12 +116,12 @@ class Grid:
         # update the word's location
         word.location = loc
         # position the word in the grid at the location
-        self._position(word)
+        self._position(word, orientation)
         # and add it to the list of words
         self._words.append(word)
 
     # checks if a word can be positioned as specified
-    def _check(self, word, loc):
+    def _check(self, word, loc, orientation):
         # the starting row and col for the word
         row = loc.row
         col = loc.col
@@ -120,13 +133,36 @@ class Grid:
                 return False
             # change the col (based on the HR orientation)
             # **modify to support remaining orientations (HL, VD, VU, DRD, DRU, DLD, DLU)**
-            col += 1
+            match orientation:
+                case "HR":
+                    col+=1
+                case "HL":
+                    col-=1
+                case "VD":
+                    row+=1
+                case "VU":
+                    row-=1
+                case "DRD":
+                    col+=1
+                    row+=1
+                case "DRU":
+                    col+=1
+                    row-=1
+                case "DLD":
+                    col-=1
+                    row+=1
+                case "DLU":
+                    col-=1
+                    row-=1
+
+                
+            
 
         # otherwise, all the letters fit!
         return True
 
     # positions a word as specified
-    def _position(self, word):
+    def _position(self, word, orientation):
         # the starting row and col for the word
         row = word.location.row
         col = word.location.col
@@ -137,7 +173,27 @@ class Grid:
             self._grid[row][col] = letter
             # change the col (based on the HR orientation)
             # **modify to support remaining orientations (HL, VD, VU, DRD, DRU, DLD, DLU)**
-            col += 1
+            match orientation:
+                case "HR":
+                    col+=1
+                case "HL":
+                    col-=1
+                case "VD":
+                    row+=1
+                case "VU":
+                    row-=1
+                case "DRD":
+                    col+=1
+                    row+=1
+                case "DRU":
+                    col+=1
+                    row-=1
+                case "DLD":
+                    col-=1
+                    row+=1
+                case "DLU":
+                    col-=1
+                    row-=1
 
     # prints the words
     def print_words(self):
@@ -165,6 +221,6 @@ class Grid:
         grid = grid.rstrip("\n")
 
         return grid
-if DEBUG:
+if not DEBUG:
     grid=Grid()
     print(grid)

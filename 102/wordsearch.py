@@ -9,7 +9,7 @@
 ###############################################################################
 
 # import libraries
-from distutils.debug import DEBUG
+from Debug import DEBUG
 from Word import Word
 from Grid import Grid
 from sys import stdin
@@ -17,7 +17,7 @@ from random import sample, choice
 
 # define constants
 NUM_WORDS = 15              # how many words to randomly select
-GRID_SIZE = 25              # the height/width of the grid
+GRID_SIZE = 25             # the height/width of the grid
 DISPLAY_SOLUTION = True     # display the solution?
 
 ######
@@ -29,7 +29,7 @@ words=[]
 fin=open('animals.txt', 'r')
     # remove the trailing newline and convert to uppercase
 for line in fin:
-    words.append(line.rstrip("\n").upper())
+    words.append(line.rstrip("\n"))
 
 # grab a sampling of the specified number of words
 words = sample(words, NUM_WORDS)
@@ -38,8 +38,9 @@ words = sample(words, NUM_WORDS)
 grid=Grid()
 
 # process the words
-    # randomly select an orientation for the current word
 for word in words:
+    # randomly select an orientation for the current word
+
     orientation=choice(Word.ORIENTATIONS)
 
     # position the current word at the chosen orientation in the grid
@@ -50,5 +51,5 @@ for word in words:
 # display the grid
 print(grid)
 # display the words
-print(grid.words)
+print(words)
 # if specified, display the solution
