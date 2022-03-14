@@ -7,5 +7,5 @@
 ###############################################################################
 
 # debug mode?
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False

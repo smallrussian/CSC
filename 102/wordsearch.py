@@ -14,6 +14,7 @@ from Word import Word
 from Grid import Grid
 from sys import stdin
 from random import sample, choice
+from sort import SelectionSort
 
 # define constants
 NUM_WORDS = 15              # how many words to randomly select
@@ -29,7 +30,7 @@ words=[]
 fin=open('animals.txt', 'r')
     # remove the trailing newline and convert to uppercase
 for line in fin:
-    words.append(line.rstrip("\n"))
+    words.append(line.rstrip("\n").upper())
 
 # grab a sampling of the specified number of words
 words = sample(words, NUM_WORDS)
@@ -47,9 +48,11 @@ for word in words:
     grid.position(word, orientation)
 
 # display stats (i.e., "Successfully placed X of Y words.")
-
+print("successfully placed {} out of {} words".format(len(grid.words), len(words)))
 # display the grid
 print(grid)
 # display the words
-print(words)
+grid.print_words()
 # if specified, display the solution
+if DISPLAY_SOLUTION==True:
+    grid.print_solution()

@@ -13,6 +13,7 @@ from Location import Location
 from Word import Word
 from random import randint
 from Debug import DEBUG
+from sort import SelectionSort
 
 # the Grid class
 # a Grid has a size (the same for both width and height), a grid of letters, and Word instances that are within the Grid
@@ -118,7 +119,7 @@ class Grid:
         # position the word in the grid at the location
         self._position(word, orientation)
         # and add it to the list of words
-        self._words.append(word)
+        self._words.append(word.word)
 
     # checks if a word can be positioned as specified
     def _check(self, word, loc, orientation):
@@ -197,7 +198,11 @@ class Grid:
 
     # prints the words
     def print_words(self):
+       
         # **add sorting the words first**
+        self._words.sort()
+        if DEBUG:
+            print(self._words)
         for word in self._words:
             print(word)
 

@@ -1,7 +1,7 @@
 
 b1="001"
 b18=b1.zfill(8)
-#print(b1)
+#print(b18)
 def write_file(filename, content):
     f=open(filename, "w")
     for item in content:
@@ -19,7 +19,10 @@ def read_file(filename):
 def twos(char):
     a = bin(char)
     b = bin(char)[2:]
+   
+    
     c = b. zfill(8)
+    
     translation={"0":"1","1":"0"}
     compliment=''
     #print(c)
@@ -29,6 +32,7 @@ def twos(char):
     twos=compliment
     decimaltwos=int(twos,2)+int(b18,2)
     bintwos=bin(decimaltwos)[2:]
+    print(type(bintwos))
     return bintwos
 def reverse_twos_comp(val, bits): #found this function at https://stackoverflow.com/questions/1604464/twos-complement-in-python
     """compute the 2's complement of int value val"""
@@ -49,7 +53,7 @@ def decryption():
         reverse=reverse_twos_comp(int(element, 2), len(element))
         reverse=(~reverse+1)
         ascii_list.append(reverse)
-    #print(ascii_list)
+    print(ascii_list)
     #for lines 50-52 credit to https://www.geeksforgeeks.org/python-ways-to-convert-list-of-ascii-value-to-string/
     final_str=""
     for value in ascii_list:
