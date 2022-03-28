@@ -40,8 +40,14 @@ def display(num, leds):
 #function that implements a full adder using two half adders
 #inputs are Cin, A, and B; coutputs are S and cout
 #this is the function that you need to implement
+def halfAdder(A, B):
+    return(A^B), (A&B)
+
 def fullAdder(cin, A, B):
-    #####
+    s1, c1=halfAdder(A,B)
+    s2, c2=halfAdder(s1, cin)
+    S=s2
+    cout=c1 or c2
     return S, cout
 
 def calculate(num1, num2):
