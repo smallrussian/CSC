@@ -1,10 +1,10 @@
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from time import sleep
 from random import randint
 
 def setGPIO():
     leds =[17,18,27,22,26,12,16,20,21]
-    GPIO.setup(leds, GPIO.OUT)
+ #   GPIO.setup(leds, GPIO.OUT)
     return leds
 
 #def allOn(leds):
@@ -28,14 +28,14 @@ def getNum():
     return num
 
 #displays the sum (by turning on the appropriate LEDS)
-def display(num, leds):
-    for i in range(len(num)):
+#def display(num, leds):
+#    for i in range(len(num)):
         #if the i-th bit is 1, then turn the i-th LED on
-        if (num[i]==1):
-            GPIO.output(leds[i], GPIO.HIGH)
+        #if (num[i]==1):
+#            GPIO.output(leds[i], GPIO.HIGH)
         #otherwise turn it off
-        else:
-            GPIO.output(leds[i], GPIO.LOW)
+        #else:
+#            GPIO.output(leds[i], GPIO.LOW)
 
 #function that implements a full adder using two half adders
 #inputs are Cin, A, and B; coutputs are S and cout
@@ -46,27 +46,26 @@ def halfAdder(A, B):
 def fullAdder(cin, A, B):
     s1, c1=halfAdder(A,B)
     s2, c2=halfAdder(s1, cin)
-    S=s2
-    cout=c1 or c2
-    return S, cout
+    cout=c1 | c2
+    return s2, cout
 
 def calculate(num1, num2):
     cout=0
     the_sum=[]
     n=len(num1)-1
-    while(n>-0):
+    while(n>=0):
         A=num1[n]
         B=num2[n]
         #set the Cin (as the previous half adder's Cout)
         cin=cout
         S, cout=fullAdder(cin, A, B)
-        the_sum.inset(0,S)
+        the_sum.insert(0,S)
         n-=1
     the_sum.insert(0, cout)
     return the_sum
 
-GPIO.setmode(GPIO.BCM)
-leds=setGPIO()
+#GPIO.setmode(GPIO.BCM)
+#leds=setGPIO()
 
 #get two random numbers and display them to the console
 num1=getNum()
@@ -79,7 +78,7 @@ print("---------------------------------")
 the_sum=calculate(num1, num2)
 print("= {}".format(the_sum))
 
-display(the_sum, leds)
+#display(the_sum, leds)
 
 input("Press ENTER to terminate")
-GPIO.cleanup()
+#GPIO.cleanup()
