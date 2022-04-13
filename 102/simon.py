@@ -48,6 +48,7 @@ def addLightinitial():
 
         else:
             print("Try again and select the correct light\n")
+            continue
 
 def addLight():
     val=random.randint(0,3)
@@ -56,7 +57,7 @@ def addLight():
     sleep(1)
     GPIO.output(leds[val], False)
     sleep(1/4)
-    ledsequence.append()
+    ledsequence.append(val)
 
 def playlights():
     for i in ledsequence:
@@ -80,9 +81,12 @@ def inputSequence():
         GPIO.output(leds[val], False)
         sleep(.25)
         if val==ledsequence[i]:
+            print ("nice")
             continue
         else:
+            print("You lose")
             lose=False
+            break
 
     
 
@@ -91,11 +95,11 @@ def inputSequence():
     
 try:
     addLightinitial()
-    while not lose:
+    while lose==False:
         addLight()
         playlights()
         inputSequence()
-
+    print("thanks for playing)
         
         
 
