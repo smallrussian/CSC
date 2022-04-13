@@ -10,6 +10,7 @@ leds=[6,13,19,21]
 switches=[20,16,12,26]
 ledsequence=[]
 score=0
+lightidentifier=True
 global lose
 lose=False
 sounds=[pygame.mixer.Sound("one.wav"),
@@ -22,7 +23,7 @@ GPIO.setup(leds, GPIO.OUT)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def addLightinitial():
-    subpressed=False
+    pressed=False
     val=random.randint(0,3)
     GPIO.output(leds[val], True)
     sounds[val].play()
@@ -31,11 +32,11 @@ def addLightinitial():
     sleep(1/4)
     print("Input it yourself\n")
     while True:
-        while not subpressed:
+        while not pressed:
             for i in range(len(switches)):
                 while(GPIO.input(switches[i])==True):
                     tempval=i
-                    subpressed=True
+                    pressed=True
 
         if tempval==val:
             GPIO.output(leds[val], True)
@@ -50,6 +51,7 @@ def addLightinitial():
 
         else:
             print("Try again and select the correct light\n")
+            pressed=False
             continue
 
 def addLight():
@@ -73,11 +75,12 @@ def playlights():
         print(colorsequence)
 
     for i in ledsequence:
-        GPIO.output(leds[i], True)
         sounds[i].play()
-        sleep(1)
-        GPIO.output(leds[i], False)
-        sleep(.25)
+        if lightidentifier==True:
+            GPIO.output(leds[i], True)
+            sleep(1*multiplier)
+            GPIO.output(leds[i], False)
+            sleep(.25*multiplier)
     
 def inputSequence():
     for i in range(len(ledsequence)):
@@ -87,18 +90,32 @@ def inputSequence():
                 while (GPIO.input(switches[n])==True):
                     val=n
                     pressed=True
-        GPIO.output(leds[val], True)
         sounds[val].play()
-        sleep(1)
-        GPIO.output(leds[val], False)
-        sleep(.25)
+        if lightidentifier==True:
+            GPIO.output(leds[val], True)
+            sleep(1*multiplier)
+            GPIO.output(leds[val], False)
+            sleep(.25*multiplier)
         if val==ledsequence[i]:
-            print ("nice")
+            print ("Good job")
             continue
         else:
-            print("You lose")
             return False
     return True   
+
+def loss():
+    for i in range(3):
+        GPIO.output(leds[0], True)
+        GPIO.output(leds[1], True)
+        GPIO.output(leds[2], True)
+        GPIO.output(leds[3], True)
+        sleep(1)        
+        GPIO.output(leds[0], False)
+        GPIO.output(leds[1], False)
+        GPIO.output(leds[2], False)
+        GPIO.output(leds[3], False)
+        sleep(.25)
+
 
     
 
@@ -107,14 +124,26 @@ def inputSequence():
     
 try:
     addLightinitial()
+    turncounter=0
     while lose==False:
+        while turncounter>=5:
+            multiplier=+.1
+        if turncounter==15:
+            lightidentifier=False
+
+
         addLight()
         playlights()
         if inputSequence()==False:
             lose=True
+        else:
+            score=+1
+            turncounter=+1
+        
     if lose==True:
+        loss()
         print("ha ha you suck")
-    print("thanks for playing")
+    print("thanks for playing. You scored {} points".format(score))
         
         
 
