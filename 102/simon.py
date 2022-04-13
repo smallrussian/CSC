@@ -20,6 +20,7 @@ GPIO.setup(leds, GPIO.OUT)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def addLightinitial():
+    subpressed=False
     val=random.randint(0,3)
     GPIO.output(leds[val], True)
     sounds[val].play()
@@ -28,7 +29,13 @@ def addLightinitial():
     sleep(1/4)
     print("Input it yourself\n")
     while True:
-        if GPIO.input(switches[val]==True):
+        while not subpressed:
+            for i in range(len(switches)):
+                while(GPIO.input(switches[i])==True):
+                    tempval=i
+                    subpressed=True
+
+        if tempval==val:
             GPIO.output(leds[val], True)
             sounds[val].play()
             sleep(1)
@@ -36,9 +43,11 @@ def addLightinitial():
             sleep(.25)
             ledsequence.append(val)
             break
+                
+                
 
         else:
-            print("Select the correct light\n")
+            print("Try again and select the correct light\n")
 
 def addLight():
     val=random.randint(0,3)
@@ -47,6 +56,7 @@ def addLight():
     sleep(1)
     GPIO.output(leds[val], False)
     sleep(1/4)
+    ledsequence.append()
 
 def playlights():
     for i in ledsequence:
