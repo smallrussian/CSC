@@ -1,14 +1,16 @@
+from distutils.version import LooseVersion
 import RPi.GPIO as GPIO
 from time import sleep 
 import pygame
 import random
-
+from Debug import DEBUG
 pygame.init()
 
 leds=[6,13,19,21]
 switches=[20,16,12,26]
 ledsequence=[]
 score=0
+global lose
 lose=False
 sounds=[pygame.mixer.Sound("one.wav"),
 pygame.mixer.Sound("two.wav"),
@@ -52,14 +54,24 @@ def addLightinitial():
 
 def addLight():
     val=random.randint(0,3)
-    GPIO.output(leds[val], True)
-    sounds[val].play()
-    sleep(1)
-    GPIO.output(leds[val], False)
-    sleep(1/4)
     ledsequence.append(val)
+    if DEBUG==True:
+        print("light added")
 
 def playlights():
+    if DEBUG==True:
+        colorsequence=[]
+        for j in ledsequence:
+            if j==0:
+                colorsequence.append("red")
+            elif j==1:
+                colorsequence.append("blue")
+            elif j==2:
+                colorsequence.append("yellow")
+            elif j==3:
+                colorsequence.append("green")
+        print(colorsequence)
+
     for i in ledsequence:
         GPIO.output(leds[i], True)
         sounds[i].play()
@@ -85,8 +97,8 @@ def inputSequence():
             continue
         else:
             print("You lose")
-            lose=False
-            break
+            return False
+    return True   
 
     
 
@@ -98,8 +110,11 @@ try:
     while lose==False:
         addLight()
         playlights()
-        inputSequence()
-    print("thanks for playing)
+        if inputSequence()==False:
+            lose=True
+    if lose==True:
+        print("ha ha you suck")
+    print("thanks for playing")
         
         
 
