@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\Users\Julian\Documents\CSC\C++\scifili\Source.cpp(121): warning C4715: 'linkedList::searchTitle': not all control paths return a value
+C:\Users\Julian\Documents\CSC\C++\scifili\Source.cpp(149): warning C4715: 'read_file': not all control paths return a value
+  scifili.vcxproj -> C:\Users\Julian\Documents\CSC\C++\scifili\x64\Debug\scifili.exe
