@@ -55,9 +55,11 @@ class Node
 {
 public:
 	Book data;
-	Node* next;
+	Node* next;//for linked list
+	//these are for the trees
 	Node* left;
 	Node* right;
+	Node* parent;
 	
 	
 	Node()
@@ -65,6 +67,7 @@ public:
 		next = NULL;
 		left = NULL;
 		right = NULL;
+		parent = NULL;
 	}
 	Node(Book data)
 	{
@@ -72,8 +75,10 @@ public:
 		this->next = NULL;
 		this->left = NULL;
 		this->right = NULL;
+		this->parent = NULL;
 	}
 	friend class linkedList;
+	friend class BTree;
 };
 
 class linkedList
@@ -89,6 +94,16 @@ public:
 	Book searchTitle(string title);
 	Book searchAuthor(string author);
 
+};
+
+class BTree
+{
+	Node* root;
+public:
+	BTree()
+	{
+		root = NULL;
+	}
 };
  void linkedList::add(Book data) {
 	Node* newNode = new Node(data);
@@ -147,6 +162,9 @@ vector<Book> read_file(string filename)
 		return books;
 	}
 }
+
+
+//the return pile will be a vector 
 
 
 void open()

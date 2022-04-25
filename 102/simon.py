@@ -10,6 +10,7 @@ leds=[6,13,19,21]
 switches=[20,16,12,26]
 ledsequence=[]
 score=0
+multiplier=1
 lightidentifier=True
 global lose
 lose=False
@@ -25,29 +26,26 @@ GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 def addLightinitial():
     pressed=False
     val=random.randint(0,3)
-    GPIO.output(leds[val], True)
-    sounds[val].play()
-    sleep(1)
-    GPIO.output(leds[val], False)
-    sleep(1/4)
-    print("Input it yourself\n")
     while True:
+        GPIO.output(leds[val], True)
+        sounds[val].play()
+        (1)
+        GPIO.output(leds[val], False)
+        (1/4)
+        print("Input it yourself\n")
         while not pressed:
             for i in range(len(switches)):
                 while(GPIO.input(switches[i])==True):
                     tempval=i
                     pressed=True
-
+        GPIO.output(leds[val], True)
+        sounds[val].play()
+        sleep(1)
+        GPIO.output(leds[val], False)
+        sleep(.25)
         if tempval==val:
-            GPIO.output(leds[val], True)
-            sounds[val].play()
-            sleep(1)
-            GPIO.output(leds[val], False)
-            sleep(.25)
             ledsequence.append(val)
-            break
-                
-                
+            break 
 
         else:
             print("Try again and select the correct light\n")
