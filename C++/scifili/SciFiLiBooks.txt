@@ -1,5 +1,5 @@
 Lord Of The Rings Trilogy, Tolkien, 0, 2
-Hitchhiker's Guide To The Galaxy, AdamsD, 0, 1
+Hitchhiker's Guide To The Galaxy, Adams, 0, 1
 Ender's Game, Card, 0, 6
 Dune Chronicles, Herbert, 1, 27
 Song Of Ice And Fire Series, Martin, 1, 54
