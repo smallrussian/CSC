@@ -23,17 +23,14 @@ int main()
 	books = read_file("SciFiLiBooks.txt");
 	LinkedList booklist;
 
-	for (auto& book : books)
-	{
-		booklist.add(book);
-	}
+	
 	//booklist.printList();
 	LinkedList checklist = makeInventoryList(booklist);
 	
 	checklist.sort();
 	//checklist.printList();
 	SearchTree Library;
-	Library.add(checklist);
+	Library.listAdd(checklist);
 	Library.displayTree(Library.getRoot());
 	//cout << books[1].getAuthor();
 }

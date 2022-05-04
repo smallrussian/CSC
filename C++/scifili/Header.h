@@ -63,7 +63,9 @@ public:
 	friend class SearchTree;
 	TNode();
 	TNode(Book data);
-
+	TNode* getRight();
+	TNode* getLeft();
+	Book getData();
 
 };
 
@@ -109,10 +111,11 @@ public:
 	friend class LinkedList;
 	SearchTree();
 	void displayTree(TNode* node);
-	void add(LinkedList list);
+	void listAdd(LinkedList list);
 	TNode* getRoot();
 	Book search(TNode* node, string author);
 	Book search(TNode* node, string title);
+	
 
 };
 static inline void strip(std::string& s);
@@ -123,11 +126,15 @@ int compareABC(string str1, string str2);
 // im using a c++ queue bc i am tired
 class Librarian
 {
+
+	LinkedList masterList;
+	LinkedList checkList;
+	SearchTree library;
 public:
 	void checkIn();
 	void searchByAuthor();
 	void searchByTitle();
 	void resuce(); //iterate through importance values with a search through the bst 
-	void open();
+	void open(SearchTree &Library);
 	void EndofDay();
 };

@@ -79,6 +79,21 @@ TNode::TNode(Book newdata)
 	this->left = this->right = NULL;
 }
 
+Book TNode::getData()
+{
+	return data;
+}
+
+TNode* TNode::getRight()
+{
+	return right;
+}
+
+TNode* TNode::getLeft()
+{
+	return left;
+}
+
 int LinkedList::count()
 {
 	int count = 0;
@@ -214,10 +229,23 @@ Book LinkedList::searchTitle(string title)
 	}
 }
 
-void SearchTree::add(LinkedList list)
+void SearchTree::listAdd(LinkedList list)
 {
 	this->root = sortedListToBST(list.getHead(), list);
 	return;
+}
+//returns a node so it can be recursive
+TNode* SearchTree::insert(TNode* rootref, Book book)
+{
+	if (!rootref)
+		return new TNode(book);
+	
+	if(compareABC(book.getAuthor(),rootref->getData().getAuthor())==1)
+		rootref.getRight() = insert(rootref.getRight(), book);
+	else
+		rootref.getLeft() = insert(rootref.getLeft(), book);
+
+	return rootref;
 }
 
 vector<Book> LinkedList::searchAuthor(string author)
@@ -551,4 +579,24 @@ void LinkedList::sort()
 	// sort the list using recursive selection
 	// sort technique
 	head = recurSelectionSort(head);
+}
+
+void Librarian::open(SearchTree &library)
+{
+	vector<Book>books;
+	books = read_file("SciFiLiBooks.txt");
+	for (auto& book : books)
+	{
+		masterList.add(book);
+	}
+	checkList=makeInventoryList(masterList);
+	checkList.sort();
+	library.add()
+
+}
+
+
+void Librarian::resuce()
+{
+
 }
