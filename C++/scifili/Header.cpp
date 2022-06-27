@@ -8,13 +8,19 @@
 #include "Header.h"
 #include <fstream>
 #include <algorithm>
+#include <queue>
 
+
+//theres a lot of linkes for this
+// but plenty of this came from geeks for geeks, iu did have to adapt it all to work with my classes 
 using namespace std;
+//default constructor for book class 
 Book::Book()
 {
 	checkstatus = false;
 	importance = 0;
 }
+//paramterized contstructor for book class 
 Book::Book(string newtitle, string newauthor, int newcheckstatus, int newimportance)
 {
 	title = newtitle;
@@ -22,23 +28,27 @@ Book::Book(string newtitle, string newauthor, int newcheckstatus, int newimporta
 	checkstatus = newcheckstatus;
 	importance = newimportance;
 }
+//title accessor
 string Book::getTitle()
 {
 	return title;
 }
+// length accessor
 int Book::getTitleSize()
 {
 	return title.size();
 }
-
+//author accessor
 string Book::getAuthor()
 {
 	return author;
 }
+//authoir length acccessor
 int Book::getAuthorSize()
 {
 	return author.size();
 }
+//returns a char array for author (i dont think its used)
  char* Book::getAuthor(bool charinidcator)
 {
 	char* char_arr;
@@ -46,6 +56,7 @@ int Book::getAuthorSize()
 	char_arr = &str_obj[0];
 	return char_arr;
 }
+ //returns a char array for title (i dont htink its used)
  char* Book::getTitle(bool charindicator)
  {
 	 char* char_arr;
@@ -53,52 +64,59 @@ int Book::getAuthorSize()
 	 char_arr = &str_obj[0];
 	 return char_arr;
  }
+ //returns if the book is checked in or not 
 bool Book::getCheckStatus()
 {
 	return checkstatus;
 }
+//returns the importance
 int Book::getImportance()
 {
 	return importance;
 }
-void Book::updateStatus(int newstatus)
+//changes the check status
+void Book::updateStatus()
 {
-	checkstatus = newstatus;
+	if (checkstatus == false)
+		checkstatus = true;
+	else
+		checkstatus = false;
 }
 
-
+//TreeNode default cosntructor 
 TNode::TNode()
 {
 	left = NULL;
 	right = NULL;
 	parent = NULL;
 }
+//TreeNode paramterized cosntructor 
 TNode::TNode(Book newdata)
 {
-	this->data = newdata;
+	data = newdata;
 	this->left = this->right = NULL;
 }
-
+//returns node data 
 Book TNode::getData()
 {
 	return data;
 }
-
+//returns right node 
 TNode* TNode::getRight()
 {
 	return right;
 }
-
+//returns left node 
 TNode* TNode::getLeft()
 {
 	return left;
 }
-
+//returns linked list length 
 int LinkedList::count()
 {
 	int count = 0;
 	LinkNode* temp = head;
-	while (temp)
+	while (temp!=NULL)
 	{
 		temp = temp->next;
 		count++;
@@ -106,14 +124,14 @@ int LinkedList::count()
 	return count;
 }
 
-
-void LinkedList::deleteNode(int importance)
+//deletes node from linked list 
+void LinkedList::deleteNode(LinkNode** headref,int importance)
 {
-	LinkNode* current = head;
+	LinkNode* current = *headref;
 	LinkNode* prev = NULL;
 	if (current != NULL && current->data.getImportance() == importance)
 	{
-		 head= current->next;
+		 *headref = current->next;
 		 delete current;
 		 return;
 	}
@@ -128,12 +146,12 @@ void LinkedList::deleteNode(int importance)
 	}
 }
 
-
+//linked list default constructor 
 LinkedList::LinkedList()
 {
 	head = NULL;
 }
-//i would have had a void function but i wanted it to return NULL 
+//reescursive internal function to sort a linked list into a Binary Search Tree
 TNode* SearchTree::sortedListToBSTRecursive(LinkNode** rhead, int count)
 {
 	if (count <= 0)
@@ -153,11 +171,21 @@ TNode* SearchTree::sortedListToBSTRecursive(LinkNode** rhead, int count)
 	
 }
 
+//finds the minimunm node in the tree 
+TNode* SearchTree::minValueNode(TNode* node)
+{
+	TNode* current = node;
+
+	while (current && current->left != NULL)
+		current = current->left;
+	return current;
+}
+//default constructor for Binary Search Tree 
 SearchTree::SearchTree()
 {
 	root = NULL;
 }
-
+//displays the tree in order 
 void SearchTree::displayTree(TNode* node)
 {
 	if (node == NULL)
@@ -169,35 +197,63 @@ void SearchTree::displayTree(TNode* node)
 
 
 
-
+//turns a sorted linked list int oa binary search tree 
 TNode* SearchTree::sortedListToBST(LinkNode* rhead, LinkedList list)
 {
 	int count = list.count();
 	return sortedListToBSTRecursive(&rhead, count);
 
 }
-
+//returns the root of the bST
 TNode* SearchTree::getRoot()
 {
 	return this->root;
 }
-Book SearchTree::search(TNode* node,string author)
+//searches for a book by author 
+Book SearchTree::searchAuthor(TNode* node,string author)
 {
 	if (root == NULL || root->data.getAuthor() == author)
 		return root->data;
 	if (compareABC(root->data.getAuthor(), author) == 2)
-		return (search(root->right, author));
-	return search(root->left, author);
+		return (searchAuthor(root->right, author));
+	return searchAuthor(root->left, author);
 }
-
-Book SearchTree::search(TNode* node, string title)
+//searches for a book by title 
+Book SearchTree::searchTitle(TNode* node, string title, string author)
 {
 	if (root == NULL || root->data.getTitle() == title)
 		return root->data;
-	if (compareABC(root->data.getTitle(), title) == 2)
-		return (search(root->right, title));
-	return search(root->left, title);
+	if (compareABC(root->data.getAuthor(), author) == 2)
+		return (searchTitle(root->right, title, author));
+	return searchTitle(root->left, title, author);
 }
+//plain search for a book, by importance cause its unique 
+Book SearchTree::search(TNode* rootref, Book book)
+{
+	if (rootref == NULL || rootref->data.getImportance() == book.getImportance())
+		return rootref->data;
+
+	if (compareABC(rootref->data.getAuthor(), book.getAuthor()) == 2)
+		return search(rootref->right, book);
+	return search(root->left, book);
+}
+
+//the search used for deleting a node 
+void SearchTree::searchDelete(TNode*& node, Book book, TNode*& parent)
+{
+	while (node != NULL && node->data.getImportance() != book.getImportance())
+	{
+		parent = node;
+
+		if (compareABC(book.getAuthor(), node->data.getAuthor()) == 2)
+			node = node->left;
+		else
+			node = node->right;
+	}
+}
+
+
+//adds a node to a linked list 
 void LinkedList::add(Book book) {
 	LinkNode* newNode = new LinkNode(book);
 	newNode->data = book;
@@ -216,6 +272,7 @@ void LinkedList::add(Book book) {
 	temp->next = newNode;
 	return;
 }
+//searchs the linked list by title 
 Book LinkedList::searchTitle(string title)
 {
 	LinkNode* current = head;
@@ -228,44 +285,107 @@ Book LinkedList::searchTitle(string title)
 		current = current->next;
 	}
 }
-
+//searchs the linkedlist by importance 
+Book LinkedList::searchImportance(int importance)
+{
+	LinkNode* current = head;
+	while (current != NULL)
+	{
+		if (current->data.getImportance() == importance)
+			return current->data;
+	}
+	current = current->next;
+}
+//actual sorted list conversion 
 void SearchTree::listAdd(LinkedList list)
 {
-	this->root = sortedListToBST(list.getHead(), list);
+	root = sortedListToBST(list.getHead(), list);
 	return;
 }
 //returns a node so it can be recursive
+//inserts a node into the tree 
 TNode* SearchTree::insert(TNode* rootref, Book book)
 {
 	if (!rootref)
 		return new TNode(book);
 	
-	if(compareABC(book.getAuthor(),rootref->getData().getAuthor())==1)
-		rootref.getRight() = insert(rootref.getRight(), book);
+	if (compareABC(book.getAuthor(), rootref->data.getAuthor()) == 1)
+		rootref->right;
 	else
-		rootref.getLeft() = insert(rootref.getLeft(), book);
+		rootref->left = insert(rootref->left, book);
 
 	return rootref;
 }
+//https://www.techiedelight.com/deletion-from-bst
+void SearchTree::deleteNode(TNode* rootref, Book book)
+{
+	TNode* parent = NULL;
+	TNode* current = root;
+	searchDelete(current,book,parent);
+	if (current == NULL)
+		return;
+	//case 1 
+	if (current->left == NULL && current->right == NULL)
+	{
+		if (current != rootref)
+		{
+			if (parent->left = current)
+				parent->left = NULL;
+			else
+				parent->right = NULL;
+		}
+		else
+			rootref = NULL;
+		free(current);
 
-vector<Book> LinkedList::searchAuthor(string author)
+	}
+	//case 2
+	else if (current->left && current->right)
+	{
+		TNode* successor = minValueNode(current->right);
+		Book newbook = successor->data;
+		deleteNode(rootref, successor->data);
+
+		current->data = newbook;
+	}
+	//case 3
+	else {
+		TNode* child = (current->left) ? current->left : current->right;
+
+		if (current != rootref)
+		{
+			if (current == parent->left)
+				parent->left = child;
+			else
+				parent->right = child;
+		}
+
+		else
+			rootref = child;
+
+		free(current);
+	}
+	
+
+	
+
+}
+//searches the linked list by author 
+Book LinkedList::searchAuthor(string author)
 {
 	LinkNode* current = head;
-	vector<Book> books;
 	while (current != NULL)
 	{
 
 		if (current->data.getAuthor() == author)
 		{
 			
-			Book book = current->data;
-
-			books.push_back(book);
+			return current->data;
 		}
 		current = current->next;
 	}
-	return books;
 }
+//cleans the list of unchecked books, 
 void LinkedList::checkCleaner()
 {
 	LinkNode* current = head;
@@ -275,13 +395,13 @@ void LinkedList::checkCleaner()
 		{
 			LinkNode* prev = current;
 			current = current->next;
-			deleteNode(prev->data.getImportance());
+			deleteNode(&head,prev->data.getImportance());
 		}
 	}
 
 }
 
-
+//swaps nodes (not sure if its used or not)
 void LinkedList::swapData(LinkNode* a, LinkNode* b)
 {
 	Book temp = a->data;
@@ -293,21 +413,27 @@ void LinkedList::printList()
 	LinkNode* current = head;
 	while (current)
 	{
-		cout << current->data.getAuthor()<<endl;
-		cout << current->data.getTitle()<<endl;
-		cout << current->data.getImportance()<<endl;
-		cout<<boolalpha<< current->data.getCheckStatus() << endl;
+		Book book = current->data;
+		cout << book.getTitle() << "written by: " << book.getAuthor() << "checked in: " << boolalpha << book.getCheckStatus();
 		current = current->next;
 	}
 }
+//returns list head 
 LinkNode* LinkedList::getHead()
 {
 	return head;
 }
+//sorts a linked list by author 
 void LinkedList::quickSort()
 {
 	quickSortRecur(head,getTail(head));
 }
+//sorts alinked list by title 
+void LinkedList::quickSort(bool title)
+{
+	quickSortRecur(head, getTail(head), title);
+}
+//uselss insertion sort i forgot to delete 
 void LinkedList::insertionSort()
 {
 	LinkNode* sorted = NULL;
@@ -321,6 +447,7 @@ void LinkedList::insertionSort()
 	}
 
 }
+//more useless insertion sort 
 void LinkedList::sortedInsert(LinkNode* newnode, LinkNode* sorted)
 {
 	/* Special case for the head end */
@@ -345,14 +472,14 @@ void LinkedList::sortedInsert(LinkNode* newnode, LinkNode* sorted)
 	}
 
 }
-
+//returns the tail of the lsit 
 LinkNode* LinkedList::getTail(LinkNode* cur)
 {
 	while (cur != NULL && cur->next == NULL)
 		cur = cur->next;
 	return cur;
 }
-
+//used to comparare valused when sorting 
 LinkNode* LinkedList::partition(LinkNode* end, LinkNode** newHead, LinkNode** newEnd)
 {
 	LinkNode* pivot = end;
@@ -361,7 +488,6 @@ LinkNode* LinkedList::partition(LinkNode* end, LinkNode** newHead, LinkNode** ne
 
 	while (cur != pivot)
 	{
-		int result = strcmp(cur->data.getAuthor(true), pivot->data.getAuthor(true));
 		if (compareABC(cur->data.getAuthor(),pivot->data.getAuthor())==2)
 		{
 			if ((*newHead) == NULL)
@@ -387,7 +513,41 @@ LinkNode* LinkedList::partition(LinkNode* end, LinkNode** newHead, LinkNode** ne
 	(*newEnd) = tail;
 	return pivot;
 }
+//partition but for a title 
+LinkNode* LinkedList::partition(LinkNode* end, LinkNode** newHead, LinkNode** newEnd, bool title)
+{
+	LinkNode* pivot = end;
+	LinkNode* prev = NULL, * cur = head, * tail = pivot;
 
+
+	while (cur != pivot)
+	{
+		if (compareABC(cur->data.getTitle(), pivot->data.getTitle()) == 2)
+		{
+			if ((*newHead) == NULL)
+				(*newHead) = cur;
+
+			prev = cur;
+			cur = cur->next;
+		}
+		else
+		{
+			if (prev)
+				prev->next = cur->next;
+			LinkNode* tmp = cur->next;
+			cur->next = NULL;
+			tail->next = cur;
+			tail = cur;
+			cur = tmp;
+		}
+	}
+	if ((*newHead) == NULL)
+		(*newHead) = pivot;
+
+	(*newEnd) = tail;
+	return pivot;
+}
+//internal recursive function for quick sort
 LinkNode* LinkedList::quickSortRecur(LinkNode* headRef,LinkNode* end)
 {
 	//base condition
@@ -415,7 +575,34 @@ LinkNode* LinkedList::quickSortRecur(LinkNode* headRef,LinkNode* end)
 	pivot->next = quickSortRecur(pivot->next, newEnd);
 	return newHead;
 }
-	
+//quickSortRecur for title 
+LinkNode* LinkedList::quickSortRecur(LinkNode* headRef, LinkNode* end, bool title)
+{
+	//base condition
+	if (!head || head == end)
+		return head;
+	LinkNode* newHead = NULL, * newEnd = NULL;
+
+	LinkNode* pivot
+		= partition(head, &newHead, &newEnd, title);
+
+	if (newHead != pivot)
+	{
+		LinkNode* tmp = newHead;
+		while (tmp->next != pivot)
+			tmp = tmp->next;
+		tmp->next = NULL;
+
+		newHead = quickSortRecur(newHead, tmp, title);
+
+		tmp = getTail(newHead);
+		tmp->next = pivot;
+
+
+	}
+	pivot->next = quickSortRecur(pivot->next, newEnd, title);
+	return newHead;
+}
 //python.strip() equavilent at beginning, for author
 //https://www.codegrepper.com/code-examples/cpp/c%2B%2B+strip+white+space+from+string
 
@@ -425,6 +612,7 @@ static inline void strip(string& s) {
 		return !isspace(ch);
 		}));
 }
+//function to read afile into a vector of books 
 vector<Book> read_file(string filename)
 {
 	string tempstring;
@@ -458,33 +646,34 @@ vector<Book> read_file(string filename)
 		Book book(tokens[0], tokens[1], checkbool, stoi(tokens[3]));
 		books.push_back(book);
 	}
+	myfile.close();
 	return books;
 	
 }
 
 
 
-
+//linked list node default  constructor 
 LinkNode::LinkNode()
 {
 	next = NULL;
 }
-
+//linked list node parameteized cosntructor
 LinkNode::LinkNode(Book data)
 {
 	this->data = data;
 }
-
+//returns node data 
 Book LinkNode::getData()
 {
-	return this->data;
+	return data;
 }
-
+//returns the "next" pointer
 LinkNode* LinkNode::getNext()
 {
 	return next;
 }
-
+//makes the list of chcekded in books 
 LinkedList makeInventoryList(LinkedList list)
 {
 	LinkedList newlist;
@@ -499,8 +688,11 @@ LinkedList makeInventoryList(LinkedList list)
 	}
 	return newlist;
 }
+//compares strings alphebtically
 int compareABC(string str1, string str2)
 {
+	if (str1 == str2)
+		return 3;
 	for (int i = 0; i < str1.length() && i < str2.length(); i++)
 	{
 		if (str1[i] == str2[i])
@@ -512,9 +704,8 @@ int compareABC(string str1, string str2)
 		else
 			return 2;
 	}
-	return 3;
 }
-
+//swap nodes again (not sreally sure if it used, cant remember what web page i got this from)
 void LinkedList::swapNodes(LinkNode** head_ref,
 	LinkNode* currX,
 	LinkNode* currY, LinkNode* prevY)
@@ -531,57 +722,97 @@ void LinkedList::swapNodes(LinkNode** head_ref,
 	currX->next = temp;
 }
 
-// function to sort the linked list using
-// recursive selection sort technique
-LinkNode* LinkedList::recurSelectionSort(LinkNode* head)
-{
-	// if there is only a single node
-	if (head->next == NULL)
-		return head;
-
-	// 'min' - pointer to store the node having
-	// minimum data value
-	LinkNode* min = head;
-
-	// 'beforeMin' - pointer to store node previous
-	// to 'min' node
-	LinkNode* beforeMin = NULL;
-	LinkNode* ptr;
-
-	// traverse the list till the last node
-	for (ptr = head; ptr->next != NULL; ptr = ptr->next) {
-
-		// if true, then update 'min' and 'beforeMin'
-		if (compareABC(ptr->next->data.getAuthor() , min->data.getAuthor())==1) {
-			min = ptr->next;
-			beforeMin = ptr;
-		}
-	}
-
-	// if 'min' and 'head' are not same,
-	// swap the head node with the 'min' node
-	if (min != head)
-		swapNodes(&head, head, min, beforeMin);
-
-	// recursively sort the remaining list
-	head->next = recurSelectionSort(head->next);
-
-	return head;
-}
 
 // function to sort the given linked list
-void LinkedList::sort()
-{
-	// if list is empty
-	if ((head) == NULL)
-		return;
 
-	// sort the list using recursive selection
-	// sort technique
-	head = recurSelectionSort(head);
+
+//end of day function for librarian 
+void Librarian::EndofDay()
+{
+	fstream file;
+	file.open("opengenus_test.txt", ios::out | ios::app);
+	LinkedList titleList = masterList;
+	titleList.quickSort(true);
+	LinkNode* current = titleList.getHead();
+	while (current != NULL)
+	{
+		file << current->getData().getTitle() << ", checked in: " << boolalpha << current->getData().getTitle() << endl;
+		current = current->getNext();
+	}
+	return;
 }
 
-void Librarian::open(SearchTree &library)
+//checks in books from the return pile, which is a queue 
+void Librarian::checkIn()
+{
+	int size = returnpile.size();
+	for (int i = 0; i < size; i++)
+	{
+		Book book = returnpile.front();
+		masterList.searchImportance(book.getImportance()).updateStatus();
+		book.updateStatus();
+		checkList.add(book);
+		library.insert(library.getRoot(), book);
+	}
+}
+//checks out books 
+void Librarian::checkOut(Book book)
+{
+	masterList.searchImportance(book.getImportance()).updateStatus();
+	LinkNode* checkHead = checkList.getHead();
+	checkList.deleteNode(&checkHead, book.getImportance());
+	library.deleteNode(library.getRoot(), book);
+
+}
+//lists books by author 
+void Librarian::listAuthor()
+{
+	masterList.quickSort();
+	masterList.printList();
+}
+//lists books by title 
+void Librarian::listTitle()
+{
+	LinkedList titleList = masterList;
+	titleList.quickSort(true);
+	titleList.printList();
+}
+//searches by author 
+void Librarian::searchByAuthor(string author)
+{
+	vector<Book> books;
+	for (int i=0;i<masterList.count();i++)
+	{
+		
+		Book book = masterList.searchAuthor(author);
+		//https://www.codegrepper.com/code-examples/cpp/check+i++an+element+is+not+in+a+vector+c%2B%2B
+		for (auto& libre : books)
+		{
+			if (libre.getImportance() == book.getImportance())
+				continue;
+			else
+				books.push_back(book);
+		}
+		
+			
+	}
+	cout << "Books by: " << author << endl;
+	for (auto& book : books)
+	{
+		cout << book.getTitle() << boolalpha << endl;
+	}
+		
+}
+//searchs by title 
+void Librarian::searchByTitle(string title)
+{
+	Book book = masterList.searchTitle(title);
+	cout << book.getTitle() << ", written by: " << book.getAuthor() << ", checked in: " << boolalpha << book.getCheckStatus() << endl;
+	
+		
+}
+//opens the library 
+void Librarian::open(SearchTree& library)
 {
 	vector<Book>books;
 	books = read_file("SciFiLiBooks.txt");
@@ -589,14 +820,19 @@ void Librarian::open(SearchTree &library)
 	{
 		masterList.add(book);
 	}
-	checkList=makeInventoryList(masterList);
-	checkList.sort();
-	library.add()
+	checkList = makeInventoryList(masterList);
+	checkList.quickSort();
+	library.listAdd(checkList);
 
 }
-
-
+//rescuses books in case of fire 
 void Librarian::resuce()
 {
-
+	vector<Book> rescue;
+	for (int i = 1; i <= checkList.count(); i++)
+	{
+		Book book = checkList.searchImportance(i);
+		library.deleteNode(library.getRoot(), book);
+		rescue.push_back(book);
+	}
 }

@@ -1,0 +1,8 @@
+﻿  Header.cpp
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(669,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(669,41): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(270): warning C4715: 'LinkedList::searchTitle': not all control paths return a value
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(281): warning C4715: 'LinkedList::searchImportance': not all control paths return a value
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(369): warning C4715: 'LinkedList::searchAuthor': not all control paths return a value
+C:\Users\Julian\Documents\CSC\C++\scifili\Header.cpp(680): warning C4715: 'compareABC': not all control paths return a value
+  scifili.vcxproj -> C:\Users\Julian\Documents\CSC\C++\scifili\Debug\scifili.exe

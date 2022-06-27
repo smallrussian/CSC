@@ -6,7 +6,9 @@
 #include <iostream>
 #include <tuple>
 #include <istream>
+#include <queue>
 using namespace std;
+//stores all the books values 
 class Book
 {
 private:
@@ -27,7 +29,7 @@ public:
 	char* getTitle(bool charindicator);
 	bool getCheckStatus();
 	int getImportance();
-	void updateStatus(int newstatus);
+	void updateStatus();
 
 	
 	
@@ -72,31 +74,36 @@ public:
 
 class LinkedList
 {
-	int count();
 	LinkNode* head;
-	void deleteNode(int importance); //deletes by importance cause its unique to each book and is easier than pointers
+	//https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/?ref=lbp
+	
 	void swapData(LinkNode* a, LinkNode* b);
 	void sortedInsert(LinkNode* newnode, LinkNode* sorted);
 	LinkNode* getTail(LinkNode* cur);
 	LinkNode* partition(LinkNode* end, LinkNode** newHead, LinkNode** newEnd);
+	LinkNode* partition(LinkNode* end, LinkNode** newHead, LinkNode** newEnd, bool title);
 	LinkNode* quickSortRecur(LinkNode*headref,LinkNode* end);
+	LinkNode* quickSortRecur(LinkNode* headref, LinkNode* end, bool title);
 	void swapNodes(LinkNode** head_ref, LinkNode* currX, LinkNode* currY, LinkNode* prevY);
-	LinkNode* recurSelectionSort(LinkNode* head);
+	
 
 
 public:
 	LinkedList();
 	void add(Book new_data);
 	Book searchTitle(string title);
-	vector<Book> searchAuthor(string author);
+	Book searchImportance(int importance);
+	Book searchAuthor(string author);
 	void checkCleaner();
 	void insertionSort();
 	void printList();
-	void sort();
+	int count();
 	LinkNode* getHead();
 	void quickSort();
+	void quickSort(bool title);
 	friend class TNode;
 	friend class SearchTree;
+	void deleteNode(LinkNode** headref, int importance); //deletes by importance cause its unique to each book and is easier than pointers
 
 };
 
@@ -106,15 +113,22 @@ protected:
 	TNode* root;
 	TNode* sortedListToBST(LinkNode* rhead, LinkedList list);
 	TNode* sortedListToBSTRecursive(LinkNode** rhead, int count);
+	TNode* minValueNode(TNode* node);
 
 public:
 	friend class LinkedList;
 	SearchTree();
+	TNode* insert(TNode* rootref, Book book);
+	void deleteNode(TNode* rootref,  Book Book);
 	void displayTree(TNode* node);
 	void listAdd(LinkedList list);
 	TNode* getRoot();
-	Book search(TNode* node, string author);
-	Book search(TNode* node, string title);
+	Book searchAuthor(TNode* node, string author);
+	Book searchTitle(TNode* node, string title, string author);
+	Book search(TNode* rootref, Book book);
+	void searchDelete(TNode*& node, Book book, TNode*& parent);
+
+
 	
 
 };
@@ -131,9 +145,14 @@ class Librarian
 	LinkedList checkList;
 	SearchTree library;
 public:
+	queue<Book> returnpile;
 	void checkIn();
-	void searchByAuthor();
-	void searchByTitle();
+	void checkOut(Book book);
+	void listAuthor();
+
+	void listTitle();
+	void searchByAuthor(string author);
+	void searchByTitle(string title);
 	void resuce(); //iterate through importance values with a search through the bst 
 	void open(SearchTree &Library);
 	void EndofDay();

@@ -8,6 +8,7 @@
 #include <tuple>
 #include "Header.h"
 #include <istream>
+#include <queue>
 using namespace std;
 
 
@@ -19,18 +20,14 @@ using namespace std;
 
 int main()
 {
+	Librarian MadamPince;
+	SearchTree Library;
 	vector<Book> books;
 	books = read_file("SciFiLiBooks.txt");
 	LinkedList booklist;
-
 	
-	//booklist.printList();
-	LinkedList checklist = makeInventoryList(booklist);
-	
-	checklist.sort();
+	MadamPince.open(Library);
 	//checklist.printList();
-	SearchTree Library;
-	Library.listAdd(checklist);
 	Library.displayTree(Library.getRoot());
 	//cout << books[1].getAuthor();
 }
