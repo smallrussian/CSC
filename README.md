@@ -2,6 +2,7 @@
 
 - This page contains some of the more recent projects I have done in Python and C+
 - Will add some java stuff soon
+- Apologies for the state of disorder
 
 ## Python
 - Python projects are contained in the Python folder
