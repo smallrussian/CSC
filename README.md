@@ -1,3 +1,3 @@
-#Welcome to my non-organized github page
-##All the python programs are either in this directory or in the folder "102"
-###All the C++ programs are in the folder "C++"
+#My loosley organized github
+
+This page contains some of the more recentprojects I have done in Python and C++
