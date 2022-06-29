@@ -13,4 +13,4 @@
 - C++ projects are contained in the C++ folder
 
 ## Java
--A lone java project is in the Java folder
+- A lone java project is in the Java folder
