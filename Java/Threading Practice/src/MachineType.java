@@ -8,6 +8,8 @@ public enum MachineType {
 
     public final String machineName;
 
+    private boolean isInUse;
+
     MachineType(String machineName) {
         this.machineName = machineName;
     }
