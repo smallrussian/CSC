@@ -1,7 +1,7 @@
 # My loosley organized GitHub page
 
 - This page contains some of the more recent projects I have done in Python and C+
-- Will add some java stuff soon
+- More java projects are on their way!
 - Apologies for the state of disorder
 
 ## Python
@@ -11,3 +11,6 @@
 
 ## C++
 - C++ projects are contained in the C++ folder
+
+## Java
+- A lone java project is in the Java folder
